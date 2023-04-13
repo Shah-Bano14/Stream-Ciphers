@@ -159,6 +159,8 @@ public class MickeyV2 {
         System.out.println("Enter the plaintext ");
         String plaintext = input.next();
 
+        byte[] ciphertext = new byte[plaintext.getBytes().length];
+
         long startTimeTh = System.currentTimeMillis();
         for(int k=0;k<numIterations;k++) {
 
@@ -172,15 +174,15 @@ public class MickeyV2 {
             byte[] plainText = plaintext.getBytes();
 
 
-            System.out.println("Enter length of keystream to be generated:");
+            //System.out.println("Enter length of keystream to be generated:");
             int l = 80;
 
-            System.out.println("Enter the 80-bit key:");
+            //System.out.println("Enter the 80-bit key:");
             for (int j = 0; j < 80; j++) {
                 key[j] = (int) (Math.random() * 2);
             }
 
-            System.out.println("Enter the value for iv (40-bit):");
+            //System.out.println("Enter the value for iv (40-bit):");
             for (int j = 0; j < 80; j++) {
                 iv[j] = (int) (Math.random() * 2);
             }
@@ -220,43 +222,44 @@ public class MickeyV2 {
             }
             System.out.println();
 
-            byte[] ciphertext = encrypt(plainText, z);
+            ciphertext = encrypt(plainText, z);
             MickeyV2 ob = new MickeyV2();
 
-            com.sun.management.OperatingSystemMXBean os = (com.sun.management.OperatingSystemMXBean) getOperatingSystemMXBean();
-
-            long physicalMemorySize = os.getTotalPhysicalMemorySize();
-            long freePhysicalMemory = os.getFreePhysicalMemorySize();
-            long freeSwapSize = os.getFreeSwapSpaceSize();
-            long commitedVirtualMemorySize = os.getCommittedVirtualMemorySize();
-            System.out.println("Plaintext: " + new String(plaintext));
-            System.out.println("Ciphertext: " + new String(ciphertext));
-            System.out.println("CPU Utilization by the process --> " + os.getProcessCpuLoad());
-            System.out.println("CPU Utilization by the system --> " + os.getSystemCpuLoad());
-            System.out.println("Available Processors --> " + os.getAvailableProcessors());
-
-
-            // memory usage
-            Runtime runtime = Runtime.getRuntime();
-            long totalMemory = runtime.totalMemory();
-            long freeMemory = runtime.freeMemory();
-            long usedMemory = totalMemory - freeMemory;
-            System.out.println("Memory usage --> " + usedMemory + " bytes");
-
-            //frequency
-
-
-            // Execute some code here
-            long endTime = System.nanoTime();
-            long elapsedTime = endTime - startTime;
-            double frequency = 1.0 / (elapsedTime / 1000000000.0);
-            System.out.println("Frequency -->  " + frequency + " Hz");
 
         }
         long endTime = System.currentTimeMillis(); // End time
         long totalTime = endTime - startTimeTh; // Total time taken in milliseconds
         double throughput = (double) numIterations / totalTime * 1000; // Throughput in operations per second
         System.out.println("Throughput: " + throughput + " ops/sec");
+
+        com.sun.management.OperatingSystemMXBean os = (com.sun.management.OperatingSystemMXBean) getOperatingSystemMXBean();
+
+        long physicalMemorySize = os.getTotalPhysicalMemorySize();
+        long freePhysicalMemory = os.getFreePhysicalMemorySize();
+        long freeSwapSize = os.getFreeSwapSpaceSize();
+        long commitedVirtualMemorySize = os.getCommittedVirtualMemorySize();
+        System.out.println("Plaintext: " + new String(plaintext));
+        System.out.println("Ciphertext: " + new String(ciphertext));
+        System.out.println("CPU Utilization by the process --> " + os.getProcessCpuLoad());
+        System.out.println("CPU Utilization by the system --> " + os.getSystemCpuLoad());
+        System.out.println("Available Processors --> " + os.getAvailableProcessors());
+
+
+        // memory usage
+        Runtime runtime = Runtime.getRuntime();
+        long totalMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+        long usedMemory = totalMemory - freeMemory;
+        System.out.println("Memory usage --> " + usedMemory + " bytes");
+
+        //frequency
+
+
+        // Execute some code here
+        long elapsedTime = endTime - startTimeTh;
+        double frequency = (1.0 * numIterations)/ (elapsedTime / 1000000000.0);
+        System.out.println("Frequency -->  " + frequency + " Hz");
+
 
     }
 }

@@ -138,20 +138,29 @@ public class Grain {
         System.out.println("Enter number of iterations ");
         int numIterations = input.nextInt();
 
+
         System.out.println("Enter the plaintext ");
         String plainText = input.next();
+        byte[] plaintext = plainText.getBytes();
+        byte[] ciphertext = new byte[plaintext.length];
+
 
         long startTimeTh = System.currentTimeMillis();
 
         for(int k=0;k<numIterations;k++) {
-        long startTime = System.nanoTime();
+       // long startTime = System.nanoTime();
         byte[] key = new byte[] {0x01, 0x23, 0x45, 0x67, 0x79, 0x41, 0x14, 0x31, 0x14, 0x65};
         byte[] iv = new byte[] {0x65, 0x44, 0x65, 0x28, 0x76, 0x54, 0x32, 0x10};
-        byte[] plaintext = plainText.getBytes();
+
 
         Grain grain = new Grain(key, iv);
         grain.baselineCounters();
-        byte[] ciphertext = grain.encrypt(plaintext);
+        ciphertext = grain.encrypt(plaintext);
+    }
+        long endTime = System.currentTimeMillis(); // End time
+        long totalTime = endTime - startTimeTh; // Total time taken in milliseconds
+        double throughput = (double) numIterations / totalTime * 1000; // Throughput in operations per second
+        System.out.println("Throughput: " + throughput + " ops/sec");
 
         com.sun.management.OperatingSystemMXBean os = (com.sun.management.OperatingSystemMXBean) getOperatingSystemMXBean();
 
@@ -178,15 +187,9 @@ public class Grain {
 
 
         // Execute some code here
-        long endTime = System.nanoTime();
-        long elapsedTime = endTime - startTime;
-        double frequency = 1.0 / (elapsedTime / 1000000000.0);
+        long elapsedTime = endTime - startTimeTh;
+        double frequency = (1.0 * numIterations) / (elapsedTime / 1000000000.0);
         System.out.println("Frequency --> " + frequency + " Hz");
-    }
-    long endTime = System.currentTimeMillis(); // End time
-    long totalTime = endTime - startTimeTh; // Total time taken in milliseconds
-    double throughput = (double) numIterations / totalTime * 1000; // Throughput in operations per second
-        System.out.println("Throughput: " + throughput + " ops/sec");
     }
 
 }
